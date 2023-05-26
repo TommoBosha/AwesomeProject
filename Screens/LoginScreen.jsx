@@ -4,14 +4,13 @@ import {
   View,
   ImageBackground,
   Text,
-  Image,
   KeyboardAvoidingView,
   Platform,
   Pressable,
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
-// import Icon from "../image/icon.svg.js";
+
 import { styles } from "./Screens.styles.js";
 
 
@@ -48,35 +47,14 @@ import { styles } from "./Screens.styles.js";
             behavior={Platform.OS === "ios" ? "padding" : "height"}
           >
             <View style={styles.wrapperLogin}>
-              {/* <View style={styles.avatar}>
-                <Image
-                  source={require("../image/rectangle.jpg")}
-                  style={styles.avatarImage}
-                />
-                <Pressable
-                  style={styles.buttonIcon}
-                >
-                  <Icon />
-                </Pressable>
-              </View> */}
+           
               <Text style={styles.title}>Увійти</Text>
               <View
                 style={{
                   ...styles.form,
                   marginBottom: isShowKeyboard ? -110 : 78,
                 }}
-              >
-                {/* <View style={{ marginBottom: 16 }}>
-                  <TextInput
-                    style={[
-                      styles.input,
-                      isInputFocused("login") && styles.inputFocus,
-                    ]}
-                    placeholder="Логін"
-                    onFocus={() => isInputFocus("login")}
-                    onBlur={isInputBlur}
-                  />
-                </View> */}
+          
                 <View style={{ marginBottom: 16 }}>
                   <TextInput
                     style={[
