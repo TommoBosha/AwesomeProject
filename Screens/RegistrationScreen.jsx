@@ -14,11 +14,17 @@ import {
 import Icon from "../image/icon.svg.js";
 import { styles } from "./Screens.styles.js";
 
+const initialState = {
+  login: "",
+  email: "",
+  password: "",
+};
 
  function RegistrationScreen() {
   const [passwordShow, setPasswordShow] = useState(true);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-  const [focusedInput, setFocusedInput] = useState(null);
+   const [focusedInput, setFocusedInput] = useState(null);
+    const [state, setState] = useState(initialState);
 
   const keyboardHiden = () => {
     setIsShowKeyboard(false);
@@ -35,7 +41,12 @@ import { styles } from "./Screens.styles.js";
     setFocusedInput(null);
   };
 
-  const isInputFocused = (inputName) => focusedInput === inputName;
+   const isInputFocused = (inputName) => focusedInput === inputName;
+   
+    const onSubmit = () => {
+    console.log(state);
+    setState(initialState);
+  };
 
   return (
     <TouchableWithoutFeedback onPress={keyboardHiden}>
@@ -75,6 +86,10 @@ import { styles } from "./Screens.styles.js";
                     placeholder="Логін"
                     onFocus={() => isInputFocus("login")}
                     onBlur={isInputBlur}
+                    onChangeText={(value) =>
+                      setState((prevState) => ({ ...prevState, login: value }))
+                    }
+                    value={state.login}
                   />
                 </View>
                 <View style={{ marginBottom: 16 }}>
@@ -86,6 +101,10 @@ import { styles } from "./Screens.styles.js";
                     placeholder="Адреса електронної пошти"
                     onFocus={() => isInputFocus("email")}
                     onBlur={isInputBlur}
+                    onChangeText={(value) =>
+                      setState((prevState) => ({ ...prevState, email: value }))
+                    }
+                    value={state.email}
                   />
                 </View>
                 <View style={{ marginBottom: 43 }}>
@@ -98,6 +117,13 @@ import { styles } from "./Screens.styles.js";
                     secureTextEntry={passwordShow}
                     onFocus={() => isInputFocus("password")}
                     onBlur={isInputBlur}
+                    onChangeText={(value) =>
+                      setState((prevState) => ({
+                        ...prevState,
+                        password: value,
+                      }))
+                    }
+                    value={state.password}
                   />
                   <Pressable
                     onPress={() => setPasswordShow(!passwordShow)}
@@ -110,7 +136,7 @@ import { styles } from "./Screens.styles.js";
                     )}
                   </Pressable>
                 </View>
-                <Pressable style={styles.button} activeOpacity={0.8}>
+                <Pressable style={styles.button}  onPress={onSubmit}>
                   <Text style={styles.buttonText}>Зареєстуватися</Text>
                 </Pressable>
                 <Text style={styles.text}>Вже є акаунт? Увійти</Text>

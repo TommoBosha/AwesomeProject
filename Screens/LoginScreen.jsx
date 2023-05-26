@@ -13,11 +13,16 @@ import {
 
 import { styles } from "./Screens.styles.js";
 
+const initialState = {
+  email: "",
+  password: "",
+};
 
- function LoginScreen() {
+function LoginScreen() {
   const [passwordShow, setPasswordShow] = useState(true);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [focusedInput, setFocusedInput] = useState(null);
+  const [state, setState] = useState(initialState);
 
   const keyboardHiden = () => {
     setIsShowKeyboard(false);
@@ -36,6 +41,11 @@ import { styles } from "./Screens.styles.js";
 
   const isInputFocused = (inputName) => focusedInput === inputName;
 
+  const onSubmit = () => {
+    console.log(state);
+    setState(initialState);
+  };
+
   return (
     <TouchableWithoutFeedback onPress={keyboardHiden}>
       <View style={styles.container}>
@@ -47,7 +57,6 @@ import { styles } from "./Screens.styles.js";
             behavior={Platform.OS === "ios" ? "padding" : "height"}
           >
             <View style={styles.wrapperLogin}>
-              
               <Text style={styles.title}>Увійти</Text>
               <View
                 style={{
@@ -55,7 +64,6 @@ import { styles } from "./Screens.styles.js";
                   marginBottom: isShowKeyboard ? -110 : 78,
                 }}
               >
-                
                 <View style={{ marginBottom: 16 }}>
                   <TextInput
                     style={[
@@ -65,6 +73,10 @@ import { styles } from "./Screens.styles.js";
                     placeholder="Адреса електронної пошти"
                     onFocus={() => isInputFocus("email")}
                     onBlur={isInputBlur}
+                    onChangeText={(value) =>
+                      setState((prevState) => ({ ...prevState, email: value }))
+                    }
+                    value={state.email}
                   />
                 </View>
                 <View style={{ marginBottom: 43 }}>
@@ -77,6 +89,13 @@ import { styles } from "./Screens.styles.js";
                     secureTextEntry={passwordShow}
                     onFocus={() => isInputFocus("password")}
                     onBlur={isInputBlur}
+                    onChangeText={(value) =>
+                      setState((prevState) => ({
+                        ...prevState,
+                        password: value,
+                      }))
+                    }
+                    value={state.password}
                   />
                   <Pressable
                     onPress={() => setPasswordShow(!passwordShow)}
@@ -89,11 +108,13 @@ import { styles } from "./Screens.styles.js";
                     )}
                   </Pressable>
                 </View>
-                <Pressable style={styles.button} activeOpacity={0.8}>
+                <Pressable style={styles.button}  onPress={onSubmit}>
                   <Text style={styles.buttonText}>Увійти</Text>
                 </Pressable>
-                
-                <Text style={styles.textLogin}>Немає акаунту? Зареєструватися</Text>
+
+                <Text style={styles.textLogin}>
+                  Немає акаунту? Зареєструватися
+                </Text>
               </View>
             </View>
           </KeyboardAvoidingView>
