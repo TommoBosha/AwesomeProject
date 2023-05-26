@@ -47,14 +47,15 @@ import { styles } from "./Screens.styles.js";
             behavior={Platform.OS === "ios" ? "padding" : "height"}
           >
             <View style={styles.wrapperLogin}>
-           
+              
               <Text style={styles.title}>Увійти</Text>
               <View
                 style={{
                   ...styles.form,
                   marginBottom: isShowKeyboard ? -110 : 78,
                 }}
-          
+              >
+                
                 <View style={{ marginBottom: 16 }}>
                   <TextInput
                     style={[
