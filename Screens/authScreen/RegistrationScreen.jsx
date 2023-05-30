@@ -11,20 +11,19 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
-import Icon from "../image/icon.svg.js";
+import Icon from "../../image/icon.svg.js";
+import { useNavigation } from "@react-navigation/native";
 import { styles } from "./Screens.styles.js";
 
-const initialState = {
-  login: "",
-  email: "",
-  password: "",
-};
 
  function RegistrationScreen() {
+  const navigation = useNavigation();
   const [passwordShow, setPasswordShow] = useState(true);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
    const [focusedInput, setFocusedInput] = useState(null);
-    const [state, setState] = useState(initialState);
+     const [login, setLogin] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const keyboardHiden = () => {
     setIsShowKeyboard(false);
@@ -44,8 +43,10 @@ const initialState = {
    const isInputFocused = (inputName) => focusedInput === inputName;
    
     const onSubmit = () => {
-    console.log(state);
-    setState(initialState);
+     console.log(login, email, password);
+    setLogin("");
+    setEmail("");
+    setPassword("");
   };
 
   return (
@@ -53,7 +54,7 @@ const initialState = {
       <View style={styles.container}>
         <ImageBackground
           style={styles.bgImage}
-          source={require("../image/bg.jpg")}
+          source={require("../../image/bg.jpg")}
         >
           <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -61,7 +62,7 @@ const initialState = {
             <View style={styles.wrapper}>
               <View style={styles.avatar}>
                 <Image
-                  source={require("../image/rectangle.jpg")}
+                  source={require("../../image/rectangle.jpg")}
                   style={styles.avatarImage}
                 />
                 <Pressable
@@ -87,9 +88,9 @@ const initialState = {
                     onFocus={() => isInputFocus("login")}
                     onBlur={isInputBlur}
                     onChangeText={(value) =>
-                      setState((prevState) => ({ ...prevState, login: value }))
+                     setLogin(value)
                     }
-                    value={state.login}
+                    value={login}
                   />
                 </View>
                 <View style={{ marginBottom: 16 }}>
@@ -102,9 +103,9 @@ const initialState = {
                     onFocus={() => isInputFocus("email")}
                     onBlur={isInputBlur}
                     onChangeText={(value) =>
-                      setState((prevState) => ({ ...prevState, email: value }))
+                      setEmail(value)
                     }
-                    value={state.email}
+                    value={email}
                   />
                 </View>
                 <View style={{ marginBottom: 43 }}>
@@ -118,12 +119,9 @@ const initialState = {
                     onFocus={() => isInputFocus("password")}
                     onBlur={isInputBlur}
                     onChangeText={(value) =>
-                      setState((prevState) => ({
-                        ...prevState,
-                        password: value,
-                      }))
+                      setPassword(value)
                     }
-                    value={state.password}
+                    value={password}
                   />
                   <Pressable
                     onPress={() => setPasswordShow(!passwordShow)}
@@ -139,7 +137,9 @@ const initialState = {
                 <Pressable style={styles.button}  onPress={onSubmit}>
                   <Text style={styles.buttonText}>Зареєстуватися</Text>
                 </Pressable>
+                <Pressable onPress={() => navigation.navigate("Login")}>
                 <Text style={styles.text}>Вже є акаунт? Увійти</Text>
+                </Pressable>
               </View>
             </View>
           </KeyboardAvoidingView>

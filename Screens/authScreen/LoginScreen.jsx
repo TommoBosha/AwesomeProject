@@ -10,6 +10,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 import { styles } from "./Screens.styles.js";
 
@@ -19,10 +20,13 @@ const initialState = {
 };
 
 function LoginScreen() {
+  const navigation = useNavigation();
   const [passwordShow, setPasswordShow] = useState(true);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [focusedInput, setFocusedInput] = useState(null);
   const [state, setState] = useState(initialState);
+    const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const keyboardHiden = () => {
     setIsShowKeyboard(false);
@@ -42,8 +46,9 @@ function LoginScreen() {
   const isInputFocused = (inputName) => focusedInput === inputName;
 
   const onSubmit = () => {
-    console.log(state);
-    setState(initialState);
+    console.log(email, password);
+    setEmail("");
+    setPassword("");
   };
 
   return (
@@ -51,7 +56,7 @@ function LoginScreen() {
       <View style={styles.container}>
         <ImageBackground
           style={styles.bgImage}
-          source={require("../image/bg.jpg")}
+          source={require("../../image/bg.jpg")}
         >
           <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -74,9 +79,9 @@ function LoginScreen() {
                     onFocus={() => isInputFocus("email")}
                     onBlur={isInputBlur}
                     onChangeText={(value) =>
-                      setState((prevState) => ({ ...prevState, email: value }))
+                      setEmail(value)
                     }
-                    value={state.email}
+                    value={email}
                   />
                 </View>
                 <View style={{ marginBottom: 43 }}>
@@ -90,12 +95,9 @@ function LoginScreen() {
                     onFocus={() => isInputFocus("password")}
                     onBlur={isInputBlur}
                     onChangeText={(value) =>
-                      setState((prevState) => ({
-                        ...prevState,
-                        password: value,
-                      }))
-                    }
-                    value={state.password}
+                     setPassword(value)}
+                    
+                    value={password}
                   />
                   <Pressable
                     onPress={() => setPasswordShow(!passwordShow)}
@@ -111,10 +113,12 @@ function LoginScreen() {
                 <Pressable style={styles.button}  onPress={onSubmit}>
                   <Text style={styles.buttonText}>Увійти</Text>
                 </Pressable>
-
+                <Pressable onPress={() => navigation.navigate("Registration")}>
                 <Text style={styles.textLogin}>
                   Немає акаунту? Зареєструватися
                 </Text>
+                </Pressable>
+                
               </View>
             </View>
           </KeyboardAvoidingView>
