@@ -47,6 +47,7 @@ function LoginScreen() {
 
   const onSubmit = () => {
     console.log(email, password);
+    navigation.navigate("Home");
     setEmail("");
     setPassword("");
   };

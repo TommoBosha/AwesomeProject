@@ -5,10 +5,10 @@ import LoginScreen from "./Screens/authScreen/LoginScreen";
 import Home from "./Screens/screensMain/Home";
 
 const AuthStack = createStackNavigator();
-const MainStack = createStackNavigator();
+// const MainStack = createStackNavigator();
 
-export const useRoute = (isAuth) => {
-    if (!isAuth) {
+export const useRoute = () => {
+    // if (!isAuth) {
     return (
         <AuthStack.Navigator>
 
@@ -22,17 +22,22 @@ export const useRoute = (isAuth) => {
                 component={LoginScreen}
                 options={{ headerShown: false, title: "Увійти" }}
             />
-        </AuthStack.Navigator>
-    );
-    }
-    return (
-        <MainStack.Navigator>
-            <MainStack.Screen
+            <AuthStack.Screen
                 name="Home"
                 component={Home}
                 options={{ headerShown: false, title: "Публикації" }}
             />
-        </MainStack.Navigator>
-
+        </AuthStack.Navigator>
     );
+    // }
+    // return (
+    // <MainStack.Navigator>
+    // <MainStack.Screen
+    //     name="Home"
+    //     component={Home}
+    //     options={{ headerShown: false, title: "Публикації" }}
+    // />
+    {/* </MainStack.Navigator> */ }
+
+    // );
 };

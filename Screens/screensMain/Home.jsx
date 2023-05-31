@@ -57,7 +57,7 @@ const Home = ({ navigation }) => {
           headerRight: () => (
             <TouchableOpacity
               style={{ marginRight: 19 }}
-              onPress={"handleSignOut"}
+              onPress={() => navigation.navigate("Login")}
             >
               <Feather name="log-out" size={24} color="#BDBDBD" />
             </TouchableOpacity>

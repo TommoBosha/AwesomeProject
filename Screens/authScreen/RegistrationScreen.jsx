@@ -43,7 +43,8 @@ import { styles } from "./Screens.styles.js";
    const isInputFocused = (inputName) => focusedInput === inputName;
    
     const onSubmit = () => {
-     console.log(login, email, password);
+      console.log(login, email, password);
+      navigation.navigate("Home");
     setLogin("");
     setEmail("");
     setPassword("");

@@ -6,7 +6,7 @@ import { useRoute } from "./router";
 
 
 export default function App() {
-  const routing = useRoute(true);
+  const routing = useRoute();
   const [fonts] = useFonts({
     "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
     "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
