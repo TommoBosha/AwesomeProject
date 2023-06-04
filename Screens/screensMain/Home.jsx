@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import PostsScreen from "./PostsScreen";
 import CreatePostsScreen from "./CreatePostsScreen";
 import ProfileScreen from "./ProfileScreen";
 import { Feather } from "@expo/vector-icons";
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
+import { styles } from "./Screens.styles";
 
 const MainTab = createBottomTabNavigator();
 
@@ -25,6 +27,14 @@ const Home = ({ navigation }) => {
         name="Posts"
         component={PostsScreen}
         options={({ route }) => ({
+          headerShown: false,
+          tabBarStyle: ((route) => {
+            const routeName = getFocusedRouteNameFromRoute(route) ?? "";
+            if (routeName === "Comments" || routeName === "Map") {
+              return { display: "none" };
+            }
+            return;
+          })(route),
           tabBarIcon: ({ focused, size, color }) => (
             <TouchableOpacity
               onPress={() => {
@@ -35,31 +45,6 @@ const Home = ({ navigation }) => {
               <View style={styles.iconNav}>
                 <Feather name="grid" size={24} color="rgba(33, 33, 33, 0.8)" />
               </View>
-            </TouchableOpacity>
-          ),
-          headerTitle: "Публікації",
-          headerTitleAlign: "center",
-          headerStyle: {
-            height: 88,
-            backgroundColor: "#FFFFFF",
-            shadowColor: "rgba(0, 0, 0, 0.3)",
-            shadowOffset: { width: 0, height: 0.5 },
-            shadowRadius: 1.35914,
-          },
-          headerTitleStyle: {
-            fontFamily: "Roboto-Medium",
-            fontStyle: "normal",
-            fontSize: 17,
-            lineHeight: 22,
-            letterSpacing: -0.408,
-          },
-          headerTintColor: "#212121",
-          headerRight: () => (
-            <TouchableOpacity
-              style={{ marginRight: 19 }}
-              onPress={() => navigation.navigate("Login")}
-            >
-              <Feather name="log-out" size={24} color="#BDBDBD" />
             </TouchableOpacity>
           ),
         })}
@@ -151,12 +136,4 @@ const Home = ({ navigation }) => {
 
 export default Home;
 
-const styles = StyleSheet.create({
-  iconNav: {
-    width: 70,
-    height: 40,
-    borderRadius: 20,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+
