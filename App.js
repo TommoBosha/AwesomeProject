@@ -1,12 +1,12 @@
 import "react-native-gesture-handler";
-import { NavigationContainer } from "@react-navigation/native";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
 import { useFonts } from "expo-font";
-import { useRoute } from "./router";
+import MainRoute from "./MainRoute";
 
 
 
 export default function App() {
-  const routing = useRoute();
   const [fonts] = useFonts({
     "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
     "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
@@ -17,9 +17,8 @@ export default function App() {
   }
 
   return (
-    <>
-      <NavigationContainer>{routing}</NavigationContainer>
-
-    </>
+    <Provider store={store}>
+      <MainRoute />
+    </Provider>
   );
 }

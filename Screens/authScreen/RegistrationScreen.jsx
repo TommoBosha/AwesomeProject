@@ -10,20 +10,30 @@ import {
   Pressable,
   Keyboard,
   TouchableWithoutFeedback,
+  TouchableOpacity,
 } from "react-native";
 import Icon from "../../image/icon.svg.js";
+import AddIcon from "../../image/add.svg.js";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import * as ImagePicker from "expo-image-picker";
+import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
+import { authSignUpUser } from "../../redux/auth/authOperations.jsx";
+import { storage } from "../../firebase/config.js";
+
 import { styles } from "./Screens.styles.js";
 
 
- function RegistrationScreen() {
+function RegistrationScreen() {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const [passwordShow, setPasswordShow] = useState(true);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-   const [focusedInput, setFocusedInput] = useState(null);
-     const [login, setLogin] = useState("");
+  const [focusedInput, setFocusedInput] = useState(null);
+  const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [avatar, setAvatar] = useState(null);
 
   const keyboardHiden = () => {
     setIsShowKeyboard(false);
@@ -40,11 +50,43 @@ import { styles } from "./Screens.styles.js";
     setFocusedInput(null);
   };
 
-   const isInputFocused = (inputName) => focusedInput === inputName;
-   
-    const onSubmit = () => {
-      console.log(login, email, password);
-      navigation.navigate("Home");
+  const isInputFocused = (inputName) => focusedInput === inputName;
+
+  const pickAvatar = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setAvatar(result.assets[0].uri);
+    }
+  };
+
+  const removeAvatar = () => {
+    setAvatar(null);
+  };
+
+  const uploadPhoto = async () => {
+    let imageRef;
+
+    if (avatar) {
+      const response = await fetch(avatar);
+      const file = await response.blob();
+      const uniqueAvatarId = Date.now().toString();
+      imageRef = ref(storage, `userAvatars/${uniqueAvatarId}`);
+      await uploadBytes(imageRef, file);
+    }
+
+    const processedPhoto = await getDownloadURL(imageRef);
+    return processedPhoto;
+  };
+
+  const onSubmit = async () => {
+    const photo = await uploadPhoto();
+    dispatch(authSignUpUser({ login, email, password, avatar: photo }));
     setLogin("");
     setEmail("");
     setPassword("");
@@ -62,15 +104,24 @@ import { styles } from "./Screens.styles.js";
           >
             <View style={styles.wrapper}>
               <View style={styles.avatar}>
-                <Image
-                  source={require("../../image/rectangle.jpg")}
-                  style={styles.avatarImage}
-                />
-                <Pressable
-                  style={styles.buttonIcon}
-                >
-                  <Icon />
-                </Pressable>
+               <Image source={{ uri: avatar }} style={styles.avatarImage} />
+                {!avatar ? (
+                  <TouchableOpacity
+                    style={styles.buttonIcon}
+                    activeOpacity={0.9}
+                    onPress={pickAvatar}
+                  >
+                    <AddIcon />
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    style={styles.btnRemoveAvatar}
+                    activeOpacity={0.9}
+                    onPress={removeAvatar}
+                  >
+                    <Icon />
+                  </TouchableOpacity>
+                )}
               </View>
               <Text style={styles.title}>Реєстрація</Text>
               <View
@@ -88,9 +139,7 @@ import { styles } from "./Screens.styles.js";
                     placeholder="Логін"
                     onFocus={() => isInputFocus("login")}
                     onBlur={isInputBlur}
-                    onChangeText={(value) =>
-                     setLogin(value)
-                    }
+                    onChangeText={(value) => setLogin(value)}
                     value={login}
                   />
                 </View>
@@ -103,9 +152,7 @@ import { styles } from "./Screens.styles.js";
                     placeholder="Адреса електронної пошти"
                     onFocus={() => isInputFocus("email")}
                     onBlur={isInputBlur}
-                    onChangeText={(value) =>
-                      setEmail(value)
-                    }
+                    onChangeText={(value) => setEmail(value)}
                     value={email}
                   />
                 </View>
@@ -119,9 +166,7 @@ import { styles } from "./Screens.styles.js";
                     secureTextEntry={passwordShow}
                     onFocus={() => isInputFocus("password")}
                     onBlur={isInputBlur}
-                    onChangeText={(value) =>
-                      setPassword(value)
-                    }
+                    onChangeText={(value) => setPassword(value)}
                     value={password}
                   />
                   <Pressable
@@ -135,11 +180,11 @@ import { styles } from "./Screens.styles.js";
                     )}
                   </Pressable>
                 </View>
-                <Pressable style={styles.button}  onPress={onSubmit}>
+                <Pressable style={styles.button} onPress={onSubmit}>
                   <Text style={styles.buttonText}>Зареєстуватися</Text>
                 </Pressable>
                 <Pressable onPress={() => navigation.navigate("Login")}>
-                <Text style={styles.text}>Вже є акаунт? Увійти</Text>
+                  <Text style={styles.text}>Вже є акаунт? Увійти</Text>
                 </Pressable>
               </View>
             </View>
@@ -151,4 +196,3 @@ import { styles } from "./Screens.styles.js";
 }
 
 export default RegistrationScreen;
-

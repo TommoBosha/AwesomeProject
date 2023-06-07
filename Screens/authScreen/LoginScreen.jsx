@@ -11,6 +11,8 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { authSignInUser } from "../../redux/auth/authOperations";
 
 import { styles } from "./Screens.styles.js";
 
@@ -21,11 +23,12 @@ const initialState = {
 
 function LoginScreen() {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const [passwordShow, setPasswordShow] = useState(true);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [focusedInput, setFocusedInput] = useState(null);
   const [state, setState] = useState(initialState);
-    const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const keyboardHiden = () => {
@@ -46,8 +49,7 @@ function LoginScreen() {
   const isInputFocused = (inputName) => focusedInput === inputName;
 
   const onSubmit = () => {
-    console.log(email, password);
-    navigation.navigate("Home");
+    dispatch(authSignInUser({ email, password }));
     setEmail("");
     setPassword("");
   };
@@ -79,9 +81,7 @@ function LoginScreen() {
                     placeholder="Адреса електронної пошти"
                     onFocus={() => isInputFocus("email")}
                     onBlur={isInputBlur}
-                    onChangeText={(value) =>
-                      setEmail(value)
-                    }
+                    onChangeText={(value) => setEmail(value)}
                     value={email}
                   />
                 </View>
@@ -95,9 +95,7 @@ function LoginScreen() {
                     secureTextEntry={passwordShow}
                     onFocus={() => isInputFocus("password")}
                     onBlur={isInputBlur}
-                    onChangeText={(value) =>
-                     setPassword(value)}
-                    
+                    onChangeText={(value) => setPassword(value)}
                     value={password}
                   />
                   <Pressable
@@ -111,15 +109,14 @@ function LoginScreen() {
                     )}
                   </Pressable>
                 </View>
-                <Pressable style={styles.button}  onPress={onSubmit}>
+                <Pressable style={styles.button} onPress={onSubmit}>
                   <Text style={styles.buttonText}>Увійти</Text>
                 </Pressable>
                 <Pressable onPress={() => navigation.navigate("Registration")}>
-                <Text style={styles.textLogin}>
-                  Немає акаунту? Зареєструватися
-                </Text>
+                  <Text style={styles.textLogin}>
+                    Немає акаунту? Зареєструватися
+                  </Text>
                 </Pressable>
-                
               </View>
             </View>
           </KeyboardAvoidingView>
